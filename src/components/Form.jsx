@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function Form() {
     const [alert, setAlert] = useState("");
     const [input, setInput] = useState({
         name: "",
         description: ""
-    }) 
+    })
+
+    const timeoutRef = useRef(null);
 
     function prevDefault(e)  {
         e.preventDefault();
@@ -18,9 +20,14 @@ function Form() {
     }
     
     function validateForm() {
-        setTimeout(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
             setAlert("");
         }, 3000);
+
         if(Object.values(input).some(input => input === "")) {
             setAlert("All fields are required");
             return;
@@ -28,6 +35,7 @@ function Form() {
 
         setAlert("Task added");
     }
+
     return (
         <form onSubmit={prevDefault}>
             <div>
