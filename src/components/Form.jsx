@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Todo from "./Todo";
 
 function Form() {
     const [alert, setAlert] = useState("");
@@ -10,16 +11,16 @@ function Form() {
 
     const timeoutRef = useRef(null);
 
-    function prevDefault(e)  {
+    function prevDefault(e) {
         e.preventDefault();
         validateForm();
     }
 
     function fillInput(e) {
-        const {name, value} = e.target;
-        setInput({...input, [name]: value})
+        const { name, value } = e.target;
+        setInput({ ...input, [name]: value })
     }
-    
+
     function validateForm() {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
@@ -29,13 +30,13 @@ function Form() {
             setAlert("");
         }, 3000);
 
-        if(Object.values(input).some(input => input === "")) {
+        if (Object.values(input).some(input => input === "")) {
             setAlert("All fields are required");
             return;
         }
 
         setAlert("Task added");
-        setTasks([...tasks, {...input}]);
+        setTasks([{ ...input }, ...tasks]);
         setInput({
             name: "",
             description: ""
@@ -43,21 +44,27 @@ function Form() {
     }
 
     return (
-        <form onSubmit={prevDefault}>
-            <div>
-                <label>Task name:</label>
-                <input type="text" name="name" value={input.name} onChange={fillInput}/>
-            </div>
-            
-            <div>
-                <label>Task description:</label>
-                <input type="text" name="description" value={input.description} onChange={fillInput}/>
-            </div>
+        <>
+            <form onSubmit={prevDefault}>
+                <div>
+                    <label>Task name:</label>
+                    <input type="text" name="name" value={input.name} onChange={fillInput} />
+                </div>
 
-            <input type="submit" value="Create Task"/>
+                <div>
+                    <label>Task description:</label>
+                    <input type="text" name="description" value={input.description} onChange={fillInput} />
+                </div>
 
-            <p>{alert}</p>
-        </form>
+                <input type="submit" value="Create Task" />
+
+                <p>{alert}</p>
+            </form>
+
+            <Todo
+                tasks={tasks}
+            />
+        </>
     )
 }
 
