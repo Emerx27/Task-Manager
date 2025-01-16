@@ -5,7 +5,8 @@ function Form() {
     const [input, setInput] = useState({
         name: "",
         description: ""
-    })
+    });
+    const [tasks, setTasks] = useState([]);
 
     const timeoutRef = useRef(null);
 
@@ -34,6 +35,11 @@ function Form() {
         }
 
         setAlert("Task added");
+        setTasks([...tasks, {...input}]);
+        setInput({
+            name: "",
+            description: ""
+        })
     }
 
     return (
